@@ -1,0 +1,41 @@
+# Расположение папок с данными.
+LOCAL_DATA_PATH : ../data
+# папка, куда будут сохраняться Предобработанные данные
+PREP_DATA : ../data/preprocessed_data
+LOCAL_DATA_PATH_mts : ../data/ml_cup_data
+DATA_FILE : competition_data_final_pqt
+# целевые переменные
+TARGET_FILE : public_train.pqt
+# id, по которым нужно предсказать пол и возраст
+SUBMIT_FILE : submit_2.pqt
+
+RAND : 10
+N_FOLDS : 5
+
+# Обработка данных с семплинигом('Y') или полная('N')
+key_smpl: 'Y' #'N'
+# процент семплинга параметры значения <1
+percent_of_sample: 0.15
+
+# фильтр топ url(чем >, тем точнее) отбор этого признака
+key_n: 100
+
+# функция randomized grid search использовать старые('old') или новые параметры('new')
+# 20 минут с семплингом и до часу на полных данных
+key_rgs:  'old' # 'new'
+
+drop_columns: 'user_id'
+
+# параметры обучения GPU/CPU
+#task_type : 'GPU'
+task_type : 'CPU'
+
+endpoints:
+   # # в контейнере
+  preprocessing_data: 'http://fastapi:8000/first_prep_data'
+  train: 'http://fastapi:8000/training_models'
+  rand_pred: 'http://fastapi:8000/rand_pred'
+  # # не в контейнере
+#  preprocessing_data: 'http://localhost:8000/first_prep_data'
+#  train: 'http://localhost:8000/training_models'
+#  rand_pred: 'http://localhost:8000/rand_pred'
